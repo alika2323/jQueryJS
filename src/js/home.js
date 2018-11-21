@@ -23,15 +23,13 @@ const prueba=1;
 
 
 
-	/* listas de peliculas */
+	/* Obteniendo listas de peliculas */
 	const actionList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=action');
 	const dramaList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=drama');
 	const animationList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=animation');
 
 
-
-
-
+	/* Renderizando listas de peliculas*/
 	renderListMovies(actionList,$actionListContainer);
 	renderListMovies(dramaList,$dramaListContainer);
 	renderListMovies(animationList,$animationListContainer);
@@ -42,16 +40,14 @@ const prueba=1;
 
 
 
-
 	/* funciones */
-
 	async function getDataMovies(url){
 		const response = await fetch(url)
 		const datos = await response.json()
 		return datos;
 	}
 
-	function videoItemTemplate(movie){
+	function stringTemplateVideo(movie){
 		return(
 			`<div class="primaryPlaylistItem">
 			<div class="primaryPlaylistItem-image">
@@ -64,12 +60,19 @@ const prueba=1;
 			)
 	}
 
-	function renderListMovies(data, container){
-		data.data.movies.forEach((movie)=>{		
-			const HTMLString = videoItemTemplate(movie);
-			const htmlAction = document.implementation.createHTMLDocument();
-			htmlAction.body.innerHTML=HTMLString;
-			container.append(htmlAction.body.children[0]);
+	function createHtmlContainer(stringContainer){
+		const html = document.implementation.createHTMLDocument();
+		html.body.innerHTML=stringContainer;
+		return html.body.children[0];
+	}
+
+
+	function renderListMovies(list, container){
+		container.querySelector('img').remove();
+		list.data.movies.forEach((movie)=>{		
+			const stringContainer = stringTemplateVideo(movie);
+			const htmlContainer = createHtmlContainer(stringContainer);
+			container.append(htmlContainer);
 		})
 	}
 
