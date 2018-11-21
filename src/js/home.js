@@ -54,30 +54,39 @@
 // })
 
 
-/* TRAER DATOS DE UN SERVIDOR CON AJAX  (JQUERY )*/
-$.ajax('https://randomuser.me/api/',
-{
-	method: 'GET',
-	success: function(data){
-		console.log("AJAX->"+data.results[0].name.first);
-	},
-	error: function(error){
-		console.log("AJAX->"+error.statusText);
-	}
-})
+// /* TRAER DATOS DE UN SERVIDOR CON AJAX  (JQUERY )*/
+// $.ajax('https://randomuser.me/api/',
+// {
+// 	method: 'GET',
+// 	success: function(data){
+// 		console.log("AJAX->"+data.results[0].name.first);
+// 	},
+// 	error: function(error){
+// 		console.log("AJAX->"+error.statusText);
+// 	}
+// })
 
 
 
-/* TRAER DATOS DE UN SERVIDOR CON FETCH (JS VANILLA )*/
-fetch('https://randomuser.me/api/')
-.then(function(respuesta){
-	return respuesta.json() ;
-})
-.then(function(data){
-	console.log("JS->"+data.results[0].name.first);
-})
+//  TRAER DATOS DE UN SERVIDOR CON FETCH (JS VANILLA )
+// fetch('https://randomuser.me/api/')
+// .then(function(respuesta){
+// 	return respuesta.json() ;
+// })
+// .then(function(data){
+// 	console.log("JS->"+data.results[0].name.first);
+// })
 
-.catch(function(error){
-	console.log("JS->"+error);
-})
+// .catch(function(error){
+// 	console.log("JS->"+error);
+// });
+
+
+
+/* FUNCIONES ASINCRONAS */
+(async function user(){
+	const respuesta = await fetch('https://randomuser.me/api/');
+	const data = await respuesta.json();
+	console.log("ASYNC->"+data.results[0].name.first);
+})()
 
