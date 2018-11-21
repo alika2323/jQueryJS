@@ -32,17 +32,19 @@ const prueba=1;
 
 
 
+	renderListMovies(actionList,$actionListContainer);
+	renderListMovies(dramaList,$dramaListContainer);
+	renderListMovies(animationList,$animationListContainer);
 
 
 
 
-	actionList.data.movies.forEach((movie)=>{
-		console.log(videoItemTemplate(movie))
-	})
+
 
 
 
 	/* funciones */
+
 	async function getDataMovies(url){
 		const response = await fetch(url)
 		const datos = await response.json()
@@ -60,6 +62,15 @@ const prueba=1;
 			</h4>
 			</div>`
 			)
+	}
+
+	function renderListMovies(data, container){
+		data.data.movies.forEach((movie)=>{		
+			const HTMLString = videoItemTemplate(movie);
+			const htmlAction = document.implementation.createHTMLDocument();
+			htmlAction.body.innerHTML=HTMLString;
+			container.append(htmlAction.body.children[0]);
+		})
 	}
 
 
