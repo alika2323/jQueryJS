@@ -8,7 +8,7 @@ const prueba=1;
 	const $animationListContainer = document.getElementById('animation');
 
 	const $featuringContainer = document.getElementById('featuring');
-	const $form = document.getElementById('form');
+	
 	const $home = document.getElementById('home');
 
 
@@ -37,7 +37,7 @@ const prueba=1;
 
 
 
-
+	
 
 
 	/* funciones */
@@ -73,8 +73,14 @@ const prueba=1;
 			const stringContainer = stringTemplateVideo(movie);
 			const htmlContainer = createHtmlContainer(stringContainer);
 			container.append(htmlContainer);
+			addEventClickMovie(htmlContainer);
 		})
 	}
 
+	function  addEventClickMovie(element){
+		element.addEventListener('click',()=>{
+			alert("holis holis");
+		})
+	}
 
 })()
