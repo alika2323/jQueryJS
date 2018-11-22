@@ -46,6 +46,7 @@ const prueba=1;
 	/* Funciones buscar peliculas  */
 	function searchMovie(event){
 		event.preventDefault();
+		$home.classList.add('search-active');
 		alert("Estas buscando tu pelicula");
 	}
 
