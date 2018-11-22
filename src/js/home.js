@@ -1,29 +1,30 @@
 const prueba=1;
 (async function load(){
 
-	/* selectores */
-	
+	/* -- SELECTORES --  */	
 	const $actionListContainer = document.getElementById('action');
 	const $dramaListContainer = document.getElementById('drama');
 	const $animationListContainer = document.getElementById('animation');
 
 	const $featuringContainer = document.getElementById('featuring');
-	
 	const $home = document.getElementById('home');
+	const $form = document.getElementById('form');
 
 
 	const $modal = document.getElementById('modal');
 	const $overlay = document.getElementById('overlay');
 	const $hideModal = document.getElementById('hide-modal');
-
-
 	const $modalImage = $modal.querySelector('img');
 	const $modalTitle = $modal.querySelector('h1');
 	const $modalDescription = $modal.querySelector('p');
 
 
+
+
+
+
+	/* -- DEASRROLLO --  */	
 	/* Elemento de busqueda */
-	const $form = document.getElementById('form');
 	$form.addEventListener('submit', searchMovie); 
 
 
@@ -41,13 +42,19 @@ const prueba=1;
 
 
 
+	/* Boton cerrar modal */
+	$hideModal.addEventListener('click',hideModal);
 
 
+
+
+
+
+	/* -- FUNCIONES --  */	
 	/* Funciones buscar peliculas  */
 	function searchMovie(event){
 		event.preventDefault();
 		$home.classList.add('search-active');
-		alert("Estas buscando tu pelicula");
 	}
 
 
@@ -90,11 +97,22 @@ const prueba=1;
 
 	function  addEventClickMovie(element){
 		element.addEventListener('click',()=>{
-			alert("holis holis");
+			showModal();	
 		})
 	}
 
 
+
+	/* Funciones modal  */
+	function showModal(){
+		$overlay.classList.add('active');
+		$modal.style.animation= 'modalIn .8s forwards';
+	}
+
+	function hideModal(){
+		$overlay.classList.remove('active');
+		$modal.style.animation= 'modalOut .8s forwards';	
+	}
 
 
 })()
