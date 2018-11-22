@@ -22,6 +22,11 @@ const prueba=1;
 	const $modalDescription = $modal.querySelector('p');
 
 
+	/* Elemento de busqueda */
+	const $form = document.getElementById('form');
+	$form.addEventListener('submit', searchMovie); 
+
+
 
 	/* Obteniendo listas de peliculas */
 	const actionList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=action');
@@ -37,10 +42,15 @@ const prueba=1;
 
 
 
-	
+
+	/* Funciones buscar peliculas  */
+	function searchMovie(event){
+		event.preventDefault();
+		alert("Estas buscando tu pelicula");
+	}
 
 
-	/* funciones */
+	/* Funciones traer y renderizar peliculas  */
 	async function getDataMovies(url){
 		const response = await fetch(url)
 		const datos = await response.json()
@@ -82,5 +92,8 @@ const prueba=1;
 			alert("holis holis");
 		})
 	}
+
+
+
 
 })()
