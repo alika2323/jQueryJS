@@ -55,6 +55,13 @@ const prueba=1;
 	function searchMovie(event){
 		event.preventDefault();
 		$home.classList.add('search-active');
+		const $loader = document.createElement('img');
+		addAttribute($loader,{
+			src: './src/images/loader.gif',
+			height: 50,
+			width: 50,
+		})
+		$featuringContainer.append($loader);
 	}
 
 
@@ -64,6 +71,7 @@ const prueba=1;
 		const datos = await response.json()
 		return datos;
 	}
+
 
 	function stringTemplateVideo(movie){
 		return(
@@ -77,6 +85,7 @@ const prueba=1;
 			</div>`
 			)
 	}
+
 
 	function createHtmlContainer(stringContainer){
 		const html = document.implementation.createHTMLDocument();
@@ -114,5 +123,13 @@ const prueba=1;
 		$modal.style.animation= 'modalOut .8s forwards';	
 	}
 
+
+	/* Funciones Generales  */
+	function addAttribute($element,attributes){
+		for (const atributo in attributes) {
+			$element.setAttribute(atributo,attributes[atributo])
+		}
+	}
+	
 
 })()
