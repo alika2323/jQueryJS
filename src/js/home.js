@@ -74,12 +74,17 @@ const prueba=1;
 		addAttribute($loader,{src: './src/images/loader.gif', height: 50, width: 50})
 		$featuringContainer.append($loader);
 
-
 		const data = new FormData($form);
-		const datePeli = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
-		const stringFeaturing = stringTemplateFeaturing(datePeli.data.movies[0]);
+		const {
+			data:{
+				movies: datePeli
+			}
+		} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
+
+
+		const stringFeaturing = stringTemplateFeaturing(datePeli[0]);
 		$featuringContainer.innerHTML=stringFeaturing;
-	}
+	} 
 
 
 	/* Funciones traer y renderizar peliculas  */
