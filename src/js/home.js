@@ -31,9 +31,9 @@ const prueba=1;
 
 
 	/* Obteniendo y renderizando listas de peliculas */
-	const actionList = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
-	const dramaList = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
-	const animationList = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
+	const {data: {movies: actionList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
+	const {data: {movies: dramaList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
+	const {data: {movies: animationList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
 
 	renderListMovies(actionList,$actionListContainer,'action');
 	renderListMovies(dramaList,$dramaListContainer, 'drama');
@@ -75,11 +75,7 @@ const prueba=1;
 		$featuringContainer.append($loader);
 
 		const data = new FormData($form);
-		const {
-			data:{
-				movies: datePeli
-			}
-		} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
+		const {data:{movies: datePeli}} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
 
 		const stringFeaturing = stringTemplateFeaturing(datePeli[0]);
 		$featuringContainer.innerHTML=stringFeaturing;
@@ -111,7 +107,7 @@ const prueba=1;
 
 	function renderListMovies(list, container,category){
 		container.querySelector('img').remove();
-		list.data.movies.forEach((movie)=>{		
+		list.forEach((movie)=>{		
 			const stringContainer = stringTemplateVideo(movie,category);
 			const htmlContainer = createHtmlContainer(stringContainer);
 			container.append(htmlContainer);
@@ -131,8 +127,13 @@ const prueba=1;
 	function showModal(element){
 		$overlay.classList.add('active');
 		$modal.style.animation= 'modalIn .8s forwards';
-		const idPeli = element.dataset.id;
-		const categoryPeli = element.dataset.category;
+		const id = element.dataset.id;
+		const category = element.dataset.category;
+		
+		const dataMovie=searchMovieModal(id, category);
+		$modalTitle.textContent=dataMovie.title;
+		$modalImage.setAttribute('src',dataMovie.medium_cover_image);
+		$modalDescription.textContent=dataMovie.description_full;
 	}
 
 
@@ -141,6 +142,25 @@ const prueba=1;
 		$modal.style.animation= 'modalOut .8s forwards';	
 	}
 
+
+	function searchMovieModal(id, category){
+		switch (category){
+			case 'action':
+			return findByIdMovie(actionList, id);
+			break;
+			case 'drama':
+			return findByIdMovie(dramaList, id);
+			break;
+			default :{
+				return findByIdMovie(animationList, id);
+			}
+		}	
+	}
+
+
+	function findByIdMovie(list, id){
+		return list.find(movie => movie.id === parseInt(id, 10));
+	}
 
 	/* funciones featuring*/
 	function stringTemplateFeaturing(peli){
