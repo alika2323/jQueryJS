@@ -32,11 +32,12 @@ const prueba=1;
 
 	/* Obteniendo y renderizando listas de peliculas */
 	const {data: {movies: actionList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
-	const {data: {movies: dramaList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
-	const {data: {movies: animationList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
-
 	renderListMovies(actionList,$actionListContainer,'action');
+
+	const {data: {movies: dramaList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
 	renderListMovies(dramaList,$dramaListContainer, 'drama');
+
+	const {data: {movies: animationList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
 	renderListMovies(animationList,$animationListContainer, 'animation');
 
 
@@ -112,8 +113,14 @@ const prueba=1;
 			const htmlContainer = createHtmlContainer(stringContainer);
 			container.append(htmlContainer);
 			addEventClickMovie(htmlContainer);
+
+			const imageContainer = htmlContainer.querySelector('img');
+			imageContainer.addEventListener('load',(event)=>{
+				event.srcElement.classList.add('fadeIn');
+			})
 		})
 	}
+
 
 	function  addEventClickMovie(element){
 		element.addEventListener('click',()=>{
@@ -129,7 +136,7 @@ const prueba=1;
 		$modal.style.animation= 'modalIn .8s forwards';
 		const id = element.dataset.id;
 		const category = element.dataset.category;
-		
+
 		const dataMovie=searchMovieModal(id, category);
 		$modalTitle.textContent=dataMovie.title;
 		$modalImage.setAttribute('src',dataMovie.medium_cover_image);
