@@ -1,6 +1,8 @@
 const prueba=1;
 (async function load(){
 
+	const BASE_API_MOVIES='https://yts.am/api/v2/list_movies.json';
+
 	/* -- SELECTORES --  */	
 	const $actionListContainer = document.getElementById('action');
 	const $dramaListContainer = document.getElementById('drama');
@@ -28,14 +30,11 @@ const prueba=1;
 	$form.addEventListener('submit', searchMovie); 
 
 
+	/* Obteniendo y renderizando listas de peliculas */
+	const actionList = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
+	const dramaList = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
+	const animationList = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
 
-	/* Obteniendo listas de peliculas */
-	const actionList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=action');
-	const dramaList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=drama');
-	const animationList = await getDataMovies('https://yts.am/api/v2/list_movies.json?genre=animation');
-
-
-	/* Renderizando listas de peliculas*/
 	renderListMovies(actionList,$actionListContainer);
 	renderListMovies(dramaList,$dramaListContainer);
 	renderListMovies(animationList,$animationListContainer);
@@ -51,17 +50,35 @@ const prueba=1;
 
 
 	/* -- FUNCIONES --  */	
+	/* Funciones Generales  */
+	function addAttribute($element,attributes){
+		for (const atributo in attributes) {
+			$element.setAttribute(atributo,attributes[atributo])
+		}
+	}
+	
+
+	function createHtmlContainer(stringContainer){
+		const html = document.implementation.createHTMLDocument();
+		html.body.innerHTML=stringContainer;
+		return html.body.children[0];
+	}
+
+
 	/* Funciones buscar peliculas  */
-	function searchMovie(event){
+	async function searchMovie(event){
 		event.preventDefault();
 		$home.classList.add('search-active');
+
 		const $loader = document.createElement('img');
-		addAttribute($loader,{
-			src: './src/images/loader.gif',
-			height: 50,
-			width: 50,
-		})
+		addAttribute($loader,{src: './src/images/loader.gif', height: 50, width: 50})
 		$featuringContainer.append($loader);
+
+
+		const data = new FormData($form);
+		const datePeli = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
+		const stringFeaturing = stringTemplateFeaturing(datePeli.data.movies[0]);
+		$featuringContainer.innerHTML=stringFeaturing;
 	}
 
 
@@ -84,13 +101,6 @@ const prueba=1;
 			</h4>
 			</div>`
 			)
-	}
-
-
-	function createHtmlContainer(stringContainer){
-		const html = document.implementation.createHTMLDocument();
-		html.body.innerHTML=stringContainer;
-		return html.body.children[0];
 	}
 
 
@@ -124,12 +134,25 @@ const prueba=1;
 	}
 
 
-	/* Funciones Generales  */
-	function addAttribute($element,attributes){
-		for (const atributo in attributes) {
-			$element.setAttribute(atributo,attributes[atributo])
-		}
+	/* funciones featuring*/
+	function stringTemplateFeaturing(peli){
+		return(
+			`<div class="featuring">
+			<div class="featuring-image">
+			<img src="${peli.medium_cover_image}" width="70" height="100" alt="">
+			</div>
+			<div class="featuring-content">
+			<p class="featuring-title">${peli.title}</p>
+			<p class="featuring-album">${peli.year}</p>
+			</div>
+			</div>`
+			)
 	}
-	
+
+
+
+
+
+
 
 })()
