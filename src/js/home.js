@@ -35,9 +35,9 @@ const prueba=1;
 	const dramaList = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
 	const animationList = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
 
-	renderListMovies(actionList,$actionListContainer);
-	renderListMovies(dramaList,$dramaListContainer);
-	renderListMovies(animationList,$animationListContainer);
+	renderListMovies(actionList,$actionListContainer,'action');
+	renderListMovies(dramaList,$dramaListContainer, 'drama');
+	renderListMovies(animationList,$animationListContainer, 'animation');
 
 
 
@@ -81,7 +81,6 @@ const prueba=1;
 			}
 		} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
 
-
 		const stringFeaturing = stringTemplateFeaturing(datePeli[0]);
 		$featuringContainer.innerHTML=stringFeaturing;
 	} 
@@ -95,9 +94,10 @@ const prueba=1;
 	}
 
 
-	function stringTemplateVideo(movie){
+
+	function stringTemplateVideo(movie,category){
 		return(
-			`<div class="primaryPlaylistItem">
+			`<div class="primaryPlaylistItem" data-id="${movie.id}" data-category="${category}">
 			<div class="primaryPlaylistItem-image">
 			<img src="${movie.medium_cover_image}">
 			</div>
@@ -109,10 +109,10 @@ const prueba=1;
 	}
 
 
-	function renderListMovies(list, container){
+	function renderListMovies(list, container,category){
 		container.querySelector('img').remove();
 		list.data.movies.forEach((movie)=>{		
-			const stringContainer = stringTemplateVideo(movie);
+			const stringContainer = stringTemplateVideo(movie,category);
 			const htmlContainer = createHtmlContainer(stringContainer);
 			container.append(htmlContainer);
 			addEventClickMovie(htmlContainer);
@@ -121,17 +121,20 @@ const prueba=1;
 
 	function  addEventClickMovie(element){
 		element.addEventListener('click',()=>{
-			showModal();	
+			showModal(element);	
 		})
 	}
 
 
 
 	/* Funciones modal  */
-	function showModal(){
+	function showModal(element){
 		$overlay.classList.add('active');
 		$modal.style.animation= 'modalIn .8s forwards';
+		const idPeli = element.dataset.id;
+		const categoryPeli = element.dataset.category;
 	}
+
 
 	function hideModal(){
 		$overlay.classList.remove('active');
