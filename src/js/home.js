@@ -76,10 +76,16 @@ const prueba=1;
 		$featuringContainer.append($loader);
 
 		const data = new FormData($form);
-		const {data:{movies: datePeli}} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
+		try	{
+			const {data:{movies: datePeli}} = await getDataMovies(`${BASE_API_MOVIES}?limit=1&query_term=${data.get('search')}`)
+			const stringFeaturing = stringTemplateFeaturing(datePeli[0]);
+			$featuringContainer.innerHTML=stringFeaturing;
 
-		const stringFeaturing = stringTemplateFeaturing(datePeli[0]);
-		$featuringContainer.innerHTML=stringFeaturing;
+		}catch(error){
+			alert(error);
+			$loader.remove();
+			$home.classList.remove('search-active');
+		}
 	} 
 
 
@@ -87,7 +93,10 @@ const prueba=1;
 	async function getDataMovies(url){
 		const response = await fetch(url)
 		const datos = await response.json()
-		return datos;
+		if (datos.data.movie_count>0) {
+			return datos;
+		}
+		throw new Error('No se encontró ningún resultado, intenta nuevamente');	
 	}
 
 
