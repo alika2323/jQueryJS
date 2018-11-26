@@ -1,4 +1,6 @@
 const prueba=1;
+console.log("%c¡Detente!", "font-family: ';Arial';, serif; font-weight: bold; color: red; font-size: 45px");
+console.log("%cEsta función del navegador está pensada para desarrolladores.", "font-family: ';Arial';, serif; color: white; font-size: 20px");
 (async function load(){
 
 	const BASE_API_MOVIES='https://yts.am/api/v2/list_movies.json';
