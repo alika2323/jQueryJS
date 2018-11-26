@@ -55,6 +55,10 @@ const prueba=1;
 
 
 
+	/* Boton cerrar modal */
+	$clearCache.addEventListener('click',clearCache);
+
+
 
 
 
@@ -217,6 +221,11 @@ const prueba=1;
 		return data;
 	}
 
+
+	function clearCache(){
+		window.localStorage.clear();
+		location.reload();
+	}
 
 
 
