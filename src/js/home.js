@@ -32,12 +32,15 @@ const prueba=1;
 
 	/* Obteniendo y renderizando listas de peliculas */
 	const {data: {movies: actionList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
+	window.localStorage.setItem('actionList', JSON.stringify(actionList));
 	renderListMovies(actionList,$actionListContainer,'action');
 
 	const {data: {movies: dramaList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
+	window.localStorage.setItem('dramaList', dramaList);
 	renderListMovies(dramaList,$dramaListContainer, 'drama');
 
 	const {data: {movies: animationList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
+	window.localStorage.setItem('animationList', animationList);
 	renderListMovies(animationList,$animationListContainer, 'animation');
 
 
@@ -96,7 +99,7 @@ const prueba=1;
 		if (datos.data.movie_count>0) {
 			return datos;
 		}
-		throw new Error('No se encontró ningún resultado, intenta nuevamente');	
+		throw 'No se encontró ningún resultado, intenta nuevamente';	
 	}
 
 
