@@ -1,6 +1,7 @@
 const prueba=1;
-console.log("%c¡Detente!", "font-family: ';Arial';, serif; font-weight: bold; color: red; font-size: 45px");
-console.log("%cEsta función del navegador está pensada para desarrolladores.", "font-family: ';Arial';, serif; color: white; font-size: 20px");
+//console.log("%c¡Detente!", "font-family: ';Arial';, serif; font-weight: bold; color: red; font-size: 45px");
+//console.log("%cEsta función del navegador está pensada para desarrolladores.", "font-family: ';Arial';, serif; color: white; font-size: 20px");
+
 (async function load(){
 
 	const BASE_API_MOVIES='https://yts.am/api/v2/list_movies.json';
@@ -22,6 +23,8 @@ console.log("%cEsta función del navegador está pensada para desarrolladores.",
 	const $modalTitle = $modal.querySelector('h1');
 	const $modalDescription = $modal.querySelector('p');
 
+	const $clearCache = document.getElementById('clearCache');
+
 
 
 
@@ -32,17 +35,17 @@ console.log("%cEsta función del navegador está pensada para desarrolladores.",
 	$form.addEventListener('submit', searchMovie); 
 
 
+
 	/* Obteniendo y renderizando listas de peliculas */
-	const {data: {movies: actionList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=action`);
-	window.localStorage.setItem('actionList', JSON.stringify(actionList));
+	const actionList = await cacheExist('action');
 	renderListMovies(actionList,$actionListContainer,'action');
 
-	const {data: {movies: dramaList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=drama`);
-	window.localStorage.setItem('dramaList', dramaList);
+
+	const dramaList = await cacheExist('drama');
 	renderListMovies(dramaList,$dramaListContainer, 'drama');
 
-	const {data: {movies: animationList}} = await getDataMovies(`${BASE_API_MOVIES}?genre=animation`);
-	window.localStorage.setItem('animationList', animationList);
+
+	const animationList   = await cacheExist('animation');
 	renderListMovies(animationList,$animationListContainer, 'animation');
 
 
@@ -183,6 +186,7 @@ console.log("%cEsta función del navegador está pensada para desarrolladores.",
 		return list.find(movie => movie.id === parseInt(id, 10));
 	}
 
+
 	/* funciones featuring*/
 	function stringTemplateFeaturing(peli){
 		return(
@@ -199,6 +203,19 @@ console.log("%cEsta función del navegador está pensada para desarrolladores.",
 	}
 
 
+
+	/* funciones featuring*/
+	async function cacheExist(category){
+		const listName =`${category}List`;
+		const cacheList = window.localStorage.getItem(`${listName}`);
+
+		if (cacheList) {
+			return JSON.parse(cacheList);
+		} 
+		const {data: {movies: data}} = await getDataMovies(`${BASE_API_MOVIES}?genre=${category}`);
+		window.localStorage.setItem(listName, JSON.stringify(data));
+		return data;
+	}
 
 
 
